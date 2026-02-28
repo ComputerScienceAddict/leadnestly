@@ -20,9 +20,9 @@ export function useLeadStatus() {
       return;
     }
 
-    async function fetchStatuses() {
+    async function fetchStatuses(client: NonNullable<ReturnType<typeof getSupabase>>) {
       try {
-        const { data } = await sb
+        const { data } = await client
           .from("lead_call_results")
           .select("lead_id, call_result");
 
@@ -38,7 +38,7 @@ export function useLeadStatus() {
       }
     }
 
-    fetchStatuses();
+    fetchStatuses(sb);
   }, []);
 
   const markLead = useCallback(async (leadId: string, result: CallResult) => {

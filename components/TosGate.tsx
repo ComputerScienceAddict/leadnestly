@@ -21,7 +21,8 @@ export default function TosGate({ children }: TosGateProps) {
 
     async function fetchAcceptance() {
       const sb = getSupabase();
-      if (!sb) {
+      const uid = user?.id;
+      if (!sb || !uid) {
         setStatus("pending");
         return;
       }
@@ -29,7 +30,7 @@ export default function TosGate({ children }: TosGateProps) {
       const { data } = await sb
         .from("terms_acceptances")
         .select("status")
-        .eq("user_id", user.id)
+        .eq("user_id", uid)
         .maybeSingle();
 
       if (data?.status === "accepted") setStatus("accepted");

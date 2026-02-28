@@ -33,9 +33,9 @@ export function useLeads() {
       return;
     }
 
-    async function fetchLeads() {
+    async function fetchLeads(client: NonNullable<ReturnType<typeof getSupabase>>) {
       try {
-        const { data, error: err } = await sb
+        const { data, error: err } = await client
           .from("leads")
           .select("*")
           .order("created_at", { ascending: false });
@@ -53,7 +53,7 @@ export function useLeads() {
       }
     }
 
-    fetchLeads();
+    fetchLeads(sb);
   }, []);
 
   const updateLead = useCallback((id: string, data: LeadFormData): Lead | null => {
