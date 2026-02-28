@@ -19,6 +19,14 @@ export default function LeadRow({ lead, callResult, onClick }: LeadRowProps) {
   const isNotInterested = callResult === "not_interested";
   const isInterested = callResult === "interested";
   const isClaimed = !!callResult;
+  const isHidden = !isClaimed;
+
+  // Only reveal first 3 chars in DOM for unclaimed leads — source code won't expose the rest
+  const namePreview = isHidden ? lead.name.slice(0, 3) : lead.name;
+  const subPreview = isHidden
+    ? ([lead.company, lead.email].filter(Boolean)[0]?.slice(0, 3) ?? "—")
+    : [lead.company, lead.email].filter(Boolean).join(" · ") || "—";
+  const placeholder = "••••••••••••••••";
 
   return (
     <button
@@ -59,23 +67,47 @@ export default function LeadRow({ lead, callResult, onClick }: LeadRowProps) {
         </span>
       </div>
 
-      {/* Name & company */}
+      {/* Name & company — only 3 chars in DOM when hidden, rest is placeholder */}
       <div style={{ flex: 1, minWidth: 0 }}>
         <div style={{
           fontSize: 14, fontWeight: 700,
           color: isNotInterested ? "#999" : "#333",
           overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap",
           textDecoration: isNotInterested ? "line-through" : "none",
+          userSelect: isHidden ? "none" : "auto",
         }}>
-          {lead.name}
+          {isHidden ? (
+            <>
+              <span>{namePreview}</span>
+              <span style={{ filter: "blur(5px)", opacity: 0.8 }}>{placeholder}</span>
+            </>
+          ) : (
+            lead.name
+          )}
         </div>
         <div style={{
           fontSize: 12, color: "#999", marginTop: 1,
           overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap",
           textDecoration: isNotInterested ? "line-through" : "none",
+          userSelect: isHidden ? "none" : "auto",
         }}>
-          {[lead.company, lead.email].filter(Boolean).join(" · ")}
+          {isHidden ? (
+            <>
+              <span>{subPreview}</span>
+              <span style={{ filter: "blur(5px)", opacity: 0.8 }}>{placeholder}</span>
+            </>
+          ) : (
+            [lead.company, lead.email].filter(Boolean).join(" · ") || "—"
+          )}
         </div>
+        {isHidden && (
+          <div style={{
+            fontSize: 11, color: "#4db8a4", fontWeight: 700, marginTop: 4,
+            fontStyle: "italic",
+          }}>
+            Click to view this lead&apos;s information
+          </div>
+        )}
       </div>
 
       {/* Date */}

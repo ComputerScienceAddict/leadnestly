@@ -299,11 +299,15 @@ export default function HomePage() {
                 padding: "12px 16px", background: "#fafafa",
                 border: "1px solid #eee", borderRadius: 4, marginBottom: 16,
               }}>
-                <div style={{ fontSize: 15, fontWeight: 700, color: "#333" }}>
-                  {lockTarget.name}
+                <div style={{ fontSize: 15, fontWeight: 700, color: "#333", userSelect: "none" }}>
+                  <span>{lockTarget.name.slice(0, 3)}</span>
+                  <span style={{ filter: "blur(5px)", opacity: 0.8 }}>••••••••••••••••</span>
+                  <span style={{ marginLeft: 4 }}>·</span>
+                  <span style={{ marginLeft: 4 }}>{[lockTarget.company, lockTarget.phone].filter(Boolean)[0]?.slice(0, 3) ?? "—"}</span>
+                  <span style={{ filter: "blur(5px)", opacity: 0.8 }}>••••••••••••••••</span>
                 </div>
-                <div style={{ fontSize: 13, color: "#888", marginTop: 2 }}>
-                  {[lockTarget.company, lockTarget.phone].filter(Boolean).join(" · ")}
+                <div style={{ fontSize: 13, color: "#4db8a4", fontWeight: 700, marginTop: 8 }}>
+                  Click &quot;Lock In &amp; Call&quot; to view this lead&apos;s full information
                 </div>
               </div>
               <p style={{ fontSize: 13, color: "#666", lineHeight: 1.6, marginBottom: 0 }}>
